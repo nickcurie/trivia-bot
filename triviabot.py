@@ -88,7 +88,8 @@ async def team_info(ctx, team_name):
                 c.execute('SELECT id FROM teams WHERE name = ?', (team_name,))
                 row = c.fetchone()
                 c.execute('INSERT INTO members (team_id, user_id) VALUES (?,?)',(row[0], ctx.message.author.id))
-                await ctx.send("Team declared! {0}, your team is '{1}'".format(ctx.message.author.display_name, team_name))
+                embedVar = discord.Embed(title="Team Declared!", description="{0}, your team is {1}".format(ctx.message.author.display_name, team_name))
+                await ctx.send(embed=embedVar)
                 conn.commit()
         # for name in team_data:
         #         members = team_data[name]
@@ -112,10 +113,11 @@ async def join_team(ctx, team_name):
         #         await ctx.send('{0} is not a valid team'.format(team_name))
         c.execute('SELECT * FROM teams WHERE name = ?', (team_name,))
         row = c.fetchone()
-        print(row)
+        #print(row)
         if row:
                 c.execute('INSERT INTO members (team_id, user_id) VALUES (?,?)', (row[0], ctx.message.author.id))
-                await ctx.send('{0} joined team {1}'.format(ctx.message.author.display_name, team_name))
+                embedVar = discord.Embed(title="Team Joined!", description="{0} joined team {1}".format(ctx.message.author.display_name, team_name))
+                await ctx.send(embed=embedVar)
                 conn.commit()
         else:
                 await ctx.send('{0} is not a valid team'.format(team_name))
